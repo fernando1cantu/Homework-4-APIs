@@ -29,8 +29,6 @@ const response = await fetch(
 
 const game = await response.json();
 
-console.log(game);
-
 document.querySelector("#game-name").textContent = game.name;
 
 document.querySelector(".game-image img").src = game.image;
@@ -48,8 +46,6 @@ const newsResponse = await fetch(
 
 const newsData = await newsResponse.json();
 
-console.log(newsData);
-
 
 const newsCards = document.querySelectorAll(".news-card");
 
@@ -60,7 +56,28 @@ newsData.news.slice(0, 3).forEach((article, index) => {
         `Published ${article.published}`;
 });
 
+const similarResponse = await fetch(
+    `https://api.gamebrain.co/v1/games/${gameID}/similar?api-key=${apiKey}`
+);
 
+const similarData = await similarResponse.json();
+
+
+const gameCards = document.querySelectorAll(".game-card");
+
+similarData.results.slice(0, 4).forEach((similarGame, index) => {
+
+    gameCards[index].querySelector("img").src = similarGame.screenshots[0];
+
+    gameCards[index].querySelector("h3").textContent = similarGame.name;
+
+    const gameMeta = gameCards[index].querySelectorAll(".game-card-meta span");
+
+    gameMeta[0].textContent = Math.trunc(similarGame.year);
+
+    gameMeta[1].textContent =
+        formatPercentage(similarGame.rating.mean);
+});
 
 }
 
