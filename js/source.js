@@ -40,5 +40,28 @@ document.querySelector(".game-genre").textContent = game.genre;
 document.querySelector(".game-meta").textContent =
     `${game.developer} - ${formatYearFromStr(game.release_date)}`;
 
+
+
+const newsResponse = await fetch(
+    `https://api.gamebrain.co/v1/games/${gameID}/news?api-key=${apiKey}`
+);
+
+const newsData = await newsResponse.json();
+
+console.log(newsData);
+
+
+const newsCards = document.querySelectorAll(".news-card");
+
+newsData.news.slice(0, 3).forEach((article, index) => {
+    newsCards[index].querySelector("img").src = article.image;
+    newsCards[index].querySelector("h3").textContent = article.title;
+    newsCards[index].querySelector(".news-published").textContent =
+        `Published ${article.published}`;
+});
+
+
+
 }
+
 load();  
